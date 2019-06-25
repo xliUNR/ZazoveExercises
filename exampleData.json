@@ -1,0 +1,15 @@
+{
+    "parAmount": 1000.0,
+    "yearsUntilMaturity": 10,
+    "coupon": 0.05,
+    "couponFrequency": 2,
+    "couponTiming": "end",
+    "yieldCurve": {
+        "1": 1.99,
+        "2": 1.84,
+        "3": 1.80,
+        "5": 1.86,
+        "7": 1.97,
+        "10": 2.08
+    }
+}
