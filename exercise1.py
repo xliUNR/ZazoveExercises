@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import sys
 import json
+import numpy
 import unittest
 
 # First will implement a test for taking in the JSON file.
@@ -19,17 +20,33 @@ def test_jsonFileOpen( fileName ):
 def jsonFileOpen( fileName ):
     with open( fileName ) as jsonFile:
         return json.load( jsonFile )
+# function calculates coupon payments based on coupon frequency
+def couponPaymentCalc( bondFaceVal, couponRate, couponFreq ):
+    return bondFaceVal * ( couponRate / couponFreq )
 
-#function to calculate present value of coupon payments
-def couponVal( couponPayment, totalPeriods, bondYield ):
+# function to calculate present value of coupon payments
+def couponValCalc( couponPayment, totalPeriods, bondYield, coupTiming ):
+    start = 0
+    # if coupon Timing is at end, then first payment starts at period 1 and must be discounted.
+    if( coupTiming == 'end'):
+        start = 1
+        totalPeriods+=1
+    # initialize coupon amount
     couponSum = 0
-    for i in range( 0:totalPeriods ):
+    # sum over total periods of bond
+    for i in range( start:totalPeriods ):
         couponSum += couponPayment / ( 1+bondYield ) ^ i
     return couponSum
+
 # function to calculate present value of bond if held to maturity
-def bondVal( bondFaceVal, bondYield, maturityTime ):
+def bondValCalc( bondFaceVal, bondYield, maturityTime ):
     return bondFaceVal / ( 1 + bondYield ) ^ maturityTime
 
+# function to calculate bond yield, interpolate and extrapolate as necessary
+def bondYieldCalc( ) 
+    # want to check if yearsUntilMaturity is in yield curve, 
+    # if not then extrapolate/interpolate by using numpy polyfit
+    
 #####################  Main Function  ##########################################
 def main():
     #with open( sys.argv[1] ) as jsonFile:
@@ -50,7 +67,7 @@ def main():
         for i in range(0:totalPeriods ):
 
     #add output of couponVal && bondVal to get present val
-            
+
 
 
 if __name__ == '__main__':
