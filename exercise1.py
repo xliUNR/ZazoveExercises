@@ -46,7 +46,7 @@ def bondValCalc( bondFaceVal, bondYield, maturityTime ):
 def bondYieldCalc( ) 
     # want to check if yearsUntilMaturity is in yield curve, 
     # if not then extrapolate/interpolate by using numpy polyfit
-    
+
 #####################  Main Function  ##########################################
 def main():
     #with open( sys.argv[1] ) as jsonFile:
@@ -54,6 +54,8 @@ def main():
     #test_jsonFileOpen( sys.argv[1] )
     inputData = jsonFileOpen( sys.argv[1] )
     #print(data)
+    # check to see if inputs are valid
+    
     #first calculate coupon payment
     couponPay = data[ 'parAmount' ] * ( data[ 'coupon' ] / data[ 'couponFrequency' ] )
     #then calculate present value of coupon payments, depends on couponTiming
