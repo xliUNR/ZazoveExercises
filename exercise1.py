@@ -3,6 +3,7 @@ import sys
 import json
 import numpy
 import unittest
+import couponbond
 
 # First will implement a test for taking in the JSON file.
 # Print out values to check 
@@ -43,6 +44,7 @@ def bondValCalc( bondFaceVal, bondYield, maturityTime ):
     return bondFaceVal / ( 1 + bondYield ) ^ maturityTime
 
 # function to calculate bond yield, interpolate and extrapolate as necessary
+# want this function to use spline for interpolation/extrapolation
 def bondYieldCalc( ) 
     # want to check if yearsUntilMaturity is in yield curve, 
     # if not then extrapolate/interpolate by using numpy polyfit
@@ -55,22 +57,22 @@ def main():
     inputData = jsonFileOpen( sys.argv[1] )
     #print(data)
     # check to see if inputs are valid
-    
+
     #first calculate coupon payment
-    couponPay = data[ 'parAmount' ] * ( data[ 'coupon' ] / data[ 'couponFrequency' ] )
-    #then calculate present value of coupon payments, depends on couponTiming
-    # if end, then start range at 1, else start range at 0?
-    couponSum = 0
-    totalPeriods = data[ 'couponFrequency' ] * data[ ' yearsUntilMaturity ' ]
-    if data[ 'couponTiming' ] == 'end':
-        for i in range(1:totalPeriods ):
-            couponSum += data[ ' parAmount ' ] * 
-    elif data[ 'couponTiming' ] == 'start':
-        for i in range(0:totalPeriods ):
-
+    couponPay = singleCouponPayment( inputData['parAmount'], inputData[ 'coupon' ], inputData[ ' couponFrequency' ] )
+    # calculate total number of periods
+    totalPeriods = inputData[ 'yearsUntilMaturity' ] * inputData[ 'couponFrequency' ]
+    # convert yield curve to two arrays for yield interpolation/extrapolation
+    tenorArr, yieldArr = dictToArr( inputData[ 'yieldCurve' ] )
+    # calculate bond yield from yield curve
+    bYield = bondYieldCalc(tenorArr, yieldArr, inputData[ 'yearsUntilMaturity' ] )
+    # calculate discounted coupon value
+    discountCouponTot = couponVal( couponPay, totalPeriods, bYield, inputData[ ' couponFrequency' ] )
+    # calculate discounted bond value
+    discountBondVal = bondValCalc( inputData[ 'parAmount' ], bYield, inputData[ 'yearsUntilMaturity' ] )
     #add output of couponVal && bondVal to get present val
-
-
+    presentVal = discountCouponTot + discountBondVal
+    print( presentVal )
 
 if __name__ == '__main__':
     main()
