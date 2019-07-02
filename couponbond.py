@@ -35,9 +35,10 @@ def inputChecker( jsonObj ):
     # check input for par amount
     try:
         # check if float or int
-        if type( jsonObj[ 'parAmount' ] ) != float or type( jsonObj[ 'parAmount' ] ) != int:
+        if type( jsonObj[ 'parAmount' ] ) != float and type( jsonObj[ 'parAmount' ] ) != int:
+            print( type(jsonObj[ 'parAmount' ]))
             raise invalidTypeError
-        elif jsonObj[ ' parAmount' ] < 0:
+        elif jsonObj[ 'parAmount' ] < 0:
             raise negativeError
     except invalidTypeError:
         print( 'parAmount:', jsonObj[ 'parAmount' ],
@@ -65,7 +66,7 @@ def inputChecker( jsonObj ):
 
     # error catching for coupon rate
     try:
-        if type( jsonObj[ 'coupon' ] ) != float or type( jsonObj[ 'coupon' ] ) != int:
+        if type( jsonObj[ 'coupon' ] ) != float and type( jsonObj[ 'coupon' ] ) != int:
             raise invalidTypeError
         elif jsonObj[ 'coupon' ] < 0:
             raise negativeError
@@ -78,8 +79,7 @@ def inputChecker( jsonObj ):
 
     # error catching for coupon frequency
     try:
-        if ( type( jsonObj[ 'couponFrequency' ] ) != float or 
-            type( jsonObj[ 'couponFrequency' ] ) != int ):
+        if ( type( jsonObj[ 'couponFrequency' ] ) != type( jsonObj[ 'couponFrequency' ] ) != int ):
             raise invalidTypeError
         elif jsonObj[ 'couponFrequency' ] < 0:
             raise negativeError
@@ -96,7 +96,7 @@ def inputChecker( jsonObj ):
     try:
         if type( jsonObj[ 'couponTiming' ] ) != str:
             raise invalidTypeError
-        elif jsonObj[ 'couponTiming' ] != 'end' or jsonObj[ 'couponTiming' ] != 'start':
+        elif jsonObj[ 'couponTiming' ] != 'end' and jsonObj[ 'couponTiming' ] != 'start':
             raise invalidStrError
     except invalidTypeError:
         print( 'couponTiming', jsonObj[ 'couponTiming' ], 'is not a string. PLease try again.' )
@@ -144,7 +144,7 @@ def couponVal( couponPayment, totalPeriods, bondYield, coupTiming ):
     # initialize coupon amount
     couponSum = 0
     # sum over total periods of bond
-    for i in range( start:totalPeriods ):
+    for i in range( start,totalPeriods ):
         couponSum += couponPayment / ( 1+bondYield ) ^ i
     return couponSum
 
