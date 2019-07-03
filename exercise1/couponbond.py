@@ -23,6 +23,10 @@ class invalidStrError( inputErrors ):
     """Raised when input string does not match possible strings"""
     pass
 
+class invalidYieldCurveValue( inputErrors ):
+    """Raised when yield curve dictionary contains an invalid item, such as tenor is not a number
+       or rate is not a number"""
+    pass
 ######################  Function declarations  ####################################
 # function for opening json files
 # Takes input file name and outputs a json object
@@ -33,24 +37,25 @@ def jsonFileOpen( fileName ):
 # checks json object data for invalid data, raises exceptions for invalid input
 # and returns 1 for error
 def inputChecker( jsonObj ):
+    # initialize return value, 0 for pass, >1 for fail
+    returnVal = 0
     # check input for par amount
     try:
         # check if float or int
         if type( jsonObj[ 'parAmount' ] ) != float and type( jsonObj[ 'parAmount' ] ) != int:
-            print( type(jsonObj[ 'parAmount' ]))
             raise invalidTypeError
         elif jsonObj[ 'parAmount' ] < 0:
             raise negativeError
     except invalidTypeError:
-        print( 'parAmount:', jsonObj[ 'parAmount' ],
-         'is not of type float or int. Please try again.' )
+        print( 'parAmount:', jsonObj[ 'parAmount' ] )
+        print( 'is not of type float or int. Please try again.' )
         print()
-        return 1
+        returnVal+=1
     except negativeError:
-        print( 'parAmount:', jsonObj[ 'parAmount' ], 
-            'is a negative number. Please try again with a positive value.' )
+        print( 'parAmount:', jsonObj[ 'parAmount' ] )
+        print( 'is a negative number. Please try again with a positive value.' )
         print()
-        return 1
+        returnVal+=1
 
     # error catching for years until maturity
     try:
@@ -59,15 +64,15 @@ def inputChecker( jsonObj ):
         elif jsonObj[ 'yearsUntilMaturity' ] < 0:
             raise negativeError
     except invalidTypeError:
-        print( 'yearsUntilMaturity:', jsonObj[ 'yearsUntilMaturity' ], 
-            'is not of type int. Please try again.')
+        print( 'yearsUntilMaturity:', jsonObj[ 'yearsUntilMaturity' ] ) 
+        print( 'is not of type int. Please try again.' )
         print()
-        return 1
+        returnVal+=1
     except negativeError:
-        print( 'yearsUntilMaturity:', jsonObj[ 'yearsUntilMaturity' ], 
-            'is a negative number. Please try again with a positive value.' )
+        print( 'yearsUntilMaturity:', jsonObj[ 'yearsUntilMaturity' ] ) 
+        print( 'is a negative number. Please try again with a positive value.' )
         print()
-        return 1
+        returnVal+=1
 
     # error catching for coupon rate
     try:
@@ -76,30 +81,32 @@ def inputChecker( jsonObj ):
         elif jsonObj[ 'coupon' ] < 0:
             raise negativeError
     except invalidTypeError:
-        print( 'coupon:', jsonObj[ 'coupon' ], 'is not of type float or int. Please try again.' )
+        print( 'coupon:', jsonObj[ 'coupon' ] )
+        print( 'is not of type float or int. Please try again.' )
         print()
-        return 1
+        returnVal+=1
     except negativeError:
-        print( 'coupon:', jsonObj[ 'coupon' ], 'is a negative number. Please try again with a positive value.' )
+        print( 'coupon:', jsonObj[ 'coupon' ] )
+        print( 'is a negative number. Please try again with a positive value.' )
         print()
-        return 1
+        returnVal+=1
 
     # error catching for coupon frequency
     try:
-        if ( type( jsonObj[ 'couponFrequency' ] ) != type( jsonObj[ 'couponFrequency' ] ) != int ):
+        if ( type( jsonObj[ 'couponFrequency' ] ) != int ):
             raise invalidTypeError
         elif jsonObj[ 'couponFrequency' ] < 0:
             raise negativeError
     except invalidTypeError:
-        print( 'couponFrequency', jsonObj[ 'couponFrequency' ], 
-            'is not of type float or int. Please try again' )
+        print( 'couponFrequency:', jsonObj[ 'couponFrequency' ] )
+        print( 'is not of type float or int. Please try again' )
         print()
-        return 1
+        returnVal+=1
     except negativeError:
-        print( 'couponFrequency', jsonObj[ 'couponFrequency' ], 
-            'is a negative number. Please try again with a positive value.' )
+        print( 'couponFrequency:', jsonObj[ 'couponFrequency' ] )
+        print( 'is a negative number. Please try again with a positive value.' )
         print()
-        return 1
+        returnVal+=1
 
     # error catching for couponTiming
     try:
@@ -108,13 +115,14 @@ def inputChecker( jsonObj ):
         elif jsonObj[ 'couponTiming' ] != 'end' and jsonObj[ 'couponTiming' ] != 'start':
             raise invalidStrError
     except invalidTypeError:
-        print( 'couponTiming', jsonObj[ 'couponTiming' ], 'is not a string. PLease try again.' )
+        print( 'couponTiming:', jsonObj[ 'couponTiming' ] )
+        print( 'is not a string. PLease try again.' )
         print()
-        return 1
+        returnVal+=1
     except invalidStrError:
-        print( 'couponTiming', jsonObj[ 'couponTiming' ], 
-            'does not match "end" or "start." Please try again with either of those two strings' )
-        return 1
+        print( 'couponTiming:', jsonObj[ 'couponTiming' ] ) 
+        print( 'does not match "end" or "start." Please try again with either of those two strings' )
+        returnVal+=1
 
     # error catching for yieldCurve
     try:
@@ -122,25 +130,31 @@ def inputChecker( jsonObj ):
             raise invalidTypeError
         else:
             yearsArr, rateArr = dictToArr( jsonObj[ 'yieldCurve' ] )
-            for year in yearsArr:
-                if year < 0:
-                    raise negativeError
-                    break
-            for rate in rateArr:
-                if rate < 0:
-                    raise negativeError
-                    break
+            # Check if dictToArr ran into errors
+            if yearsArr == 1 and rateArr == 1:
+                raise invalidTypeError
+            # Check for negative values
+            else:    
+                for year in yearsArr:
+                    if year < 0:
+                        raise negativeError
+                        break
+                for rate in rateArr:
+                    if rate < 0:
+                        raise negativeError
+                        break
     except invalidTypeError:
-        print( 'yieldCurve', jsonObj[ 'yieldCurve' ], 'is not in correct format. Please try again.' )
+        print( 'yieldCurve:', jsonObj[ 'yieldCurve' ] ) 
+        print( 'is not in correct format. Please try again.' )
         print()
-        return 1
+        returnVal+=1
     except negativeError:
-        print( 'yieldCurve', jsonObj[ 'yieldCurve' ], 
-            'has a value that is negative. Please make sure all values are positive and try again.' )
+        print( 'yieldCurve:', jsonObj[ 'yieldCurve' ] )
+        print( 'has a value that is negative. Please make sure all values are positive and try again.' )
         print()
-        return 1
+        returnVal+=1
     #return 0 for success    
-    return 0
+    return returnVal
     
 # Returns amount for a single coupon payment
 # calculated from a bond face value, the coupon rate, and the frequency coupon is paid
@@ -174,12 +188,14 @@ def dictToArr( inputDict ):
     # converts each key value pair to integer, float and sorts by key ( years until maturity )
     try:
         keyValList = sorted( [ [ int(k), float(v) ] for k,v in inputDict.items() ] )
-        keyArr = [ keyValList[ index ][ 0 ] for index in range( 0, len( keyValList ) ) ]
-        valArr = [ keyValList[ index ][ 1 ] for index in range( 0, len( keyValList ) ) ]
-        return keyArr, valArr
     except ValueError:
-        print( "One of the dictionary items is not a number" ) 
-    
+        print( "One of the dictionary items is not a number" )
+        # If one of the dictionary items is not a number, return 1,1
+        return 1,1 
+    keyArr = [ keyValList[ index ][ 0 ] for index in range( 0, len( keyValList ) ) ]
+    valArr = [ keyValList[ index ][ 1 ] for index in range( 0, len( keyValList ) ) ]
+    return keyArr, valArr
+
 # function to calculate bond yield, interpolate and extrapolate as necessary
 # models yield curve using linear spline.
 def bondYieldCalc( YUMArr, yieldRateArr, YUM ): 

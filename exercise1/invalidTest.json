@@ -1,0 +1,15 @@
+{
+    "parAmount": "string",
+    "yearsUntilMaturity": "c",
+    "coupon": "string",
+    "couponFrequency": "c",
+    "couponTiming": 1,
+    "yieldCurve": {
+        "h": 1.99,
+        "2": "c",
+        "3": 1.80,
+        "5": 1.86,
+        "7": 1.97,
+        "10": 2.08
+    }
+}
