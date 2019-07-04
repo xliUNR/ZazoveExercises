@@ -44,35 +44,60 @@ class inputTest( unittest.TestCase):
 
 class functionTests( unittest.TestCase ):
 	# test singleCouponPayment function
-	def test_singleCouponZeroFreq(self):
+	def test_singleCoupon_ZeroFreq(self):
 		self.assertEqual( cb.singleCouponPayment( 100.0, 0.01, 0 ), 0 )
 
 	def test_singleCoupon(self):
 		self.assertEqual( cb.singleCouponPayment( 100.0, 0.01, 5 ), 0.2 )
 	
 	# test coupon value function
-	def test_couponValStart(self):
-		self.assertEqual( '%.4f'%cb.couponVal( 15.0, 4, 0.01, 'start'), '59.1148' )
+	def test_couponVal_Start(self):
+		self.assertEqual( float( '%.4f'%cb.couponVal( 15.0, 4, 0.01, 'start') ), 59.1148 )
+
+	def test_couponVal_End(self):
+		self.assertEqual( float( '%.4f'%cb.couponVal( 15.0, 4, 0.01, 'end') ), 58.5295 )
 	
+	def test_couponVal_ZeroPeriod_Start(self):
+		self.assertEqual( float( '%.4f'%cb.couponVal(15.0, 0, 0.01, 'start') ), 0.0000 )
 
-	def test_couponValEnd(self):
-		self.assertEqual( '%.4f'%cb.couponVal( 15.0, 4, 0.01, 'end'), '58.5295' )
-	
-
-	def test_couponValZeroPeriodStart(self):
-		self.assertEqual( '%.4f'%cb.couponVal(15.0, 0, 0.01, 'start'), '0.0000' )
-
-	def test_couponValZeroPeriodEnd(self):
-		self.assertEqual( '%.4f'%cb.couponVal(15.0, 0, 0.01, 'end'), '0.0000' )
+	def test_couponVal_ZeroPeriod_End(self):
+		self.assertEqual( float( '%.4f'%cb.couponVal(15.0, 0, 0.01, 'end') ), 0.0000 )
 	
 	# test bondValCalc function
+	def test_bondValCalc_ZeroMaturity(self):
+		self.assertEqual( float( '%.4f'%cb.bondValCalc( 100.0, 0.01, 0) ), 100.0000 )
 
+	def test_bondValCalc(self):
+		self.assertEqual( float( '%.4f'%cb.bondValCalc( 100.0, 0.01, 5) ), 95.1466 )
 	# test dictToArr function
+	def test_dictToArr_invalidKey(self):
+		testDict = {'1': 1, '2': 1, 'c': 5}
+		self.assertEqual( cb.dictToArr(testDict), (1,1) )
 
+	def test_dictToArr_invalidVal(self):
+		testDict = {'1': 1, '2': 'hello', '3': 5}
+		self.assertEqual( cb.dictToArr(testDict), (1,1) )
+		
+	def test_dictToArr(self):
+		testDict = {'1': 1, '2': 1, '3': 5}
+		self.assertEqual( cb.dictToArr(testDict), ([1, 2, 3], [1.0, 1.0, 5.0]) )
+				
 	# test bondYieldCalc function
-	#def test_singleCouponPayment(self):
-	#	self.assertEqual()
+	# test value in curve
+	def test_bondYieldCalc(self):
+		years = [ 1,2,3,5,7,10 ]
+		rate = [ 1.99,1.84,1.8,1.86,1.97,2.08 ]
+		self.assertEqual( cb.bondYieldCalc( years, rate, 3 ), 1.8 )
 
+	def test_bondYieldCalc_extrapolate(self):
+		years = [ 1,2,3,5,7,10 ]
+		rate = [ 1.99,1.84,1.8,1.86,1.97,2.08 ]
+		self.assertEqual( float ('%.4f'%cb.bondYieldCalc( years, rate, 12 ) ), 2.1533 )
+	
+	def test_bondYieldCalc_interpolate(self):
+		years = [ 1,2,3,5,7,10 ]
+		rate = [ 1.99,1.84,1.8,1.86,1.97,2.08 ]
+		self.assertEqual( cb.bondYieldCalc( years, rate, 4 ), 1.83 )
 if __name__ == '__main__':
 	unittest.main()
 	

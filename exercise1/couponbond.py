@@ -180,7 +180,7 @@ def couponVal( couponPayment, totalPeriods, bondYield, coupTiming ):
 # function to calculate present value of bond if held to maturity
 # Inputs are the face value of the bond, yield, and maturity time.
 def bondValCalc( bondFaceVal, bondYield, maturityTime ):
-    return bondFaceVal / ( 1 + bondYield ) ^ maturityTime
+    return bondFaceVal / ( 1 + bondYield ) ** maturityTime
 
 # function to convert a dictionary into two arrays, used in bondYieldCalc
 # outputs two arrays, one for the keys and one for the values
@@ -201,5 +201,5 @@ def dictToArr( inputDict ):
 def bondYieldCalc( YUMArr, yieldRateArr, YUM ): 
     # perform linear spline
     f = interp1d( YUMArr, yieldRateArr, fill_value='extrapolate' )
-    return f( YUM )
+    return float(f( YUM ))
 
