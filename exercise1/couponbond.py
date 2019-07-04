@@ -23,10 +23,6 @@ class invalidStrError( inputErrors ):
     """Raised when input string does not match possible strings"""
     pass
 
-class invalidYieldCurveValue( inputErrors ):
-    """Raised when yield curve dictionary contains an invalid item, such as tenor is not a number
-       or rate is not a number"""
-    pass
 ######################  Function declarations  ####################################
 # function for opening json files
 # Takes input file name and outputs a json object
@@ -44,7 +40,7 @@ def inputChecker( jsonObj ):
         # check if float or int
         if type( jsonObj[ 'parAmount' ] ) != float and type( jsonObj[ 'parAmount' ] ) != int:
             raise invalidTypeError
-        elif jsonObj[ 'parAmount' ] < 0:
+        elif jsonObj[ 'parAmount' ] <= 0:
             raise negativeError
     except invalidTypeError:
         print( 'parAmount:', jsonObj[ 'parAmount' ] )
@@ -53,7 +49,7 @@ def inputChecker( jsonObj ):
         returnVal+=1
     except negativeError:
         print( 'parAmount:', jsonObj[ 'parAmount' ] )
-        print( 'is a negative number. Please try again with a positive value.' )
+        print( 'is a negative number or 0. Please try again with a positive value.' )
         print()
         returnVal+=1
 
@@ -159,7 +155,11 @@ def inputChecker( jsonObj ):
 # Returns amount for a single coupon payment
 # calculated from a bond face value, the coupon rate, and the frequency coupon is paid
 def singleCouponPayment( bondFaceVal, couponRate, couponFreq ):
-    return bondFaceVal * ( couponRate / couponFreq )
+    # Check for 0 couponFreq
+    if couponFreq == 0:
+        return 0
+    else:
+        return bondFaceVal * ( couponRate / couponFreq )
 
 # Returns total value of coupon payments discounted with DCF model.
 # Takes in coupon payment amount calculated from singleCouponPayment, total periods,
@@ -174,7 +174,7 @@ def couponVal( couponPayment, totalPeriods, bondYield, coupTiming ):
     couponSum = 0
     # sum over total periods of bond
     for i in range( start,totalPeriods ):
-        couponSum += couponPayment / ( 1+bondYield ) ^ i
+        couponSum += couponPayment / ( 1+bondYield ) ** i
     return couponSum
 
 # function to calculate present value of bond if held to maturity

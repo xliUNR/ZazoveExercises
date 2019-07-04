@@ -42,6 +42,37 @@ class inputTest( unittest.TestCase):
 		# inputChecker should return 1 if exception is caught
 		self.assertEqual( cb.inputChecker( testData ), 1 )
 
+class functionTests( unittest.TestCase ):
+	# test singleCouponPayment function
+	def test_singleCouponZeroFreq(self):
+		self.assertEqual( cb.singleCouponPayment( 100.0, 0.01, 0 ), 0 )
+
+	def test_singleCoupon(self):
+		self.assertEqual( cb.singleCouponPayment( 100.0, 0.01, 5 ), 0.2 )
+	
+	# test coupon value function
+	def test_couponValStart(self):
+		self.assertEqual( '%.4f'%cb.couponVal( 15.0, 4, 0.01, 'start'), '59.1148' )
+	
+
+	def test_couponValEnd(self):
+		self.assertEqual( '%.4f'%cb.couponVal( 15.0, 4, 0.01, 'end'), '58.5295' )
+	
+
+	def test_couponValZeroPeriodStart(self):
+		self.assertEqual( '%.4f'%cb.couponVal(15.0, 0, 0.01, 'start'), '0.0000' )
+
+	def test_couponValZeroPeriodEnd(self):
+		self.assertEqual( '%.4f'%cb.couponVal(15.0, 0, 0.01, 'end'), '0.0000' )
+	
+	# test bondValCalc function
+
+	# test dictToArr function
+
+	# test bondYieldCalc function
+	#def test_singleCouponPayment(self):
+	#	self.assertEqual()
+
 if __name__ == '__main__':
 	unittest.main()
 	
