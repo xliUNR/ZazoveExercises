@@ -38,9 +38,15 @@ class inputTest( unittest.TestCase):
 
 	# Tests if check for strings other than "end" and "start" for couponTiming
 	def test_CouponTiming(self):
-		testData = cb.jsonFileOpen( 'invalidCouponTiming.json')
+		testData = cb.jsonFileOpen( 'invalidCouponTiming.json' )
 		# inputChecker should return 1 if exception is caught
 		self.assertEqual( cb.inputChecker( testData ), 1 )
+
+	# Test for zero coupon frequency
+	def test_couponFreq_Zero(self):
+		testData = cb.jsonFileOpen( 'zeroCouponFreq.json' )
+		self.assertEqual( cb.inputChecker( testData ), 1 )
+
 
 class functionTests( unittest.TestCase ):
 	# test singleCouponPayment function
@@ -52,23 +58,23 @@ class functionTests( unittest.TestCase ):
 	
 	# test coupon value function
 	def test_couponVal_Start(self):
-		self.assertEqual( float( '%.4f'%cb.couponVal( 15.0, 4, 0.01, 'start') ), 59.1148 )
+		self.assertEqual( float( '%.4f'%cb.couponVal( 15.0, 4, 0.01, 2, 'start') ), 59.5537 )
 
 	def test_couponVal_End(self):
-		self.assertEqual( float( '%.4f'%cb.couponVal( 15.0, 4, 0.01, 'end') ), 58.5295 )
+		self.assertEqual( float( '%.4f'%cb.couponVal( 15.0, 4, 0.01, 2, 'end') ), 59.2574 )
 	
 	def test_couponVal_ZeroPeriod_Start(self):
-		self.assertEqual( float( '%.4f'%cb.couponVal(15.0, 0, 0.01, 'start') ), 0.0000 )
+		self.assertEqual( float( '%.4f'%cb.couponVal(15.0, 0, 0.01, 2, 'start') ), 0.0000 )
 
 	def test_couponVal_ZeroPeriod_End(self):
-		self.assertEqual( float( '%.4f'%cb.couponVal(15.0, 0, 0.01, 'end') ), 0.0000 )
+		self.assertEqual( float( '%.4f'%cb.couponVal(15.0, 0, 0.01, 2, 'end') ), 0.0000 )
 	
 	# test bondValCalc function
 	def test_bondValCalc_ZeroMaturity(self):
-		self.assertEqual( float( '%.4f'%cb.bondValCalc( 100.0, 0.01, 0) ), 100.0000 )
+		self.assertEqual( float( '%.4f'%cb.bondValCalc( 100.0, 0.01, 2, 0) ), 100.0000 )
 
 	def test_bondValCalc(self):
-		self.assertEqual( float( '%.4f'%cb.bondValCalc( 100.0, 0.01, 5) ), 95.1466 )
+		self.assertEqual( float( '%.4f'%cb.bondValCalc( 100.0, 0.01, 2, 5) ), 97.5371 )
 	# test dictToArr function
 	def test_dictToArr_invalidKey(self):
 		testDict = {'1': 1, '2': 1, 'c': 5}

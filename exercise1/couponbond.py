@@ -89,7 +89,7 @@ def inputChecker( jsonObj ):
     try:
         if ( type( jsonObj[ 'couponFrequency' ] ) != int ):
             raise invalidTypeError
-        elif jsonObj[ 'couponFrequency' ] < 0:
+        elif jsonObj[ 'couponFrequency' ] <= 0:
             raise negativeError
     except invalidTypeError:
         print( 'couponFrequency:', jsonObj[ 'couponFrequency' ] )
@@ -98,7 +98,8 @@ def inputChecker( jsonObj ):
         returnVal+=1
     except negativeError:
         print( 'couponFrequency:', jsonObj[ 'couponFrequency' ] )
-        print( 'is a negative number. Please try again with a positive value.' )
+        print( 'is a negative number or 0. Please try again with frequency > 0.' )
+        print( 'To run program with NO coupon payments, please set couponFrequency to 1, and couponRate = 0.' )
         print()
         returnVal+=1
 

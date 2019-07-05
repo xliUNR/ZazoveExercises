@@ -30,8 +30,8 @@ def main():
     #add output of couponVal && bondVal to get present val
     presentVal = discountCouponTot + discountBondVal
     # print output
-    print( float('%.4f'%presentVal ) )
-
+    print( '%.4f'%presentVal ) 
+    
 if __name__ == '__main__':
     main()
 
