@@ -202,4 +202,7 @@ def bondYieldCalc( YUMArr, yieldRateArr, YUM ):
     # perform linear spline
     f = interp1d( YUMArr, yieldRateArr, fill_value='extrapolate' )
     return float(f( YUM ))
-
+# calculates final values
+def dcfAll( jsonObj ):
+    
+    return value
