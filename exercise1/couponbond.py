@@ -2,7 +2,6 @@
 # This file is a module that contains functions for coupon bond value calculator
 import json
 from scipy.interpolate import interp1d
-import unittest
 
 ######################  Error definition for error handling   ###############################
 class inputErrors(Exception):
