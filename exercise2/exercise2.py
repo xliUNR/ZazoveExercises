@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import sys
 import argparse
-from optionsClass import call,put
+from OptionsClass import Call,Put
 import optionsFunctions as opt
 
 def main():
@@ -26,8 +26,8 @@ def main():
 
     if errorCount > 0:
         return 1
-    else:
-        print(errorCount)
+    
+    print(errorCount)
     #instantiate P or C class
     if args.opt_type == 'C':
         optWork = Put( args.k, args.s, args.t, args.u, args.r )

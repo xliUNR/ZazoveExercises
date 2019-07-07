@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import unittest
 import optionsFunctions as opt
+from OptionsClass import Options, Call, Put
 
 class InputTest( unittest.TestCase ):
 
@@ -19,6 +20,7 @@ class InputTest( unittest.TestCase ):
     def test_intTypeCheckIncorrect(self):
         self.assertEqual( opt.intTypeCheck( 'hello', 'num' ), False )
 
+
     # tests for negative values check
     def test_negativeCheckNegVals(self):
         self.assertEqual( opt.negativeCheck( -10, 'num' ), 1 )
@@ -28,6 +30,23 @@ class InputTest( unittest.TestCase ):
 
     def test_negativeCheckPosVals(self):
         self.assertEqual( opt.negativeCheck( 10, 'num' ), 0 )
+
+# Tests for the Options Class methods
+class OptionsClassTest( unittest.TestCase ):
+    # tests constructor
+    def test_optionsConstructor(self):
+        testOpt = Options( 5, 10, 2, 1.01, 0.01 )
+        # test each attribute
+        self.assertEqual( testOpt.strikePrice, 5 )
+        self.assertEqual( testOpt.startPrice, 10 )
+        self.assertEqual( testOpt.time, 2 )
+        self.assertEqual( testOpt.upSize, 1.01 )
+        self.assertEqual( testOpt.riskFreeRate, 0.01 )
+        self.assertEqual( testOpt.levels, 3 )
+        self.assertEqual( testOpt.numNodes, 6 )
+        self.assertEqual( testOpt.stockTree, [ 0,0,0,0,0,0 ] )
+        self.assertEqual( testOpt.optTree, [ 0,0,0,0,0,0 ] )
+
 
 
 if __name__ == '__main__':

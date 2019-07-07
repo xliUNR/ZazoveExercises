@@ -10,6 +10,20 @@ class Options:
         self.time = time
         self.upSize = upSize
         self.riskFreeRate = rfr
+        # nodes required for binomial tree = (n^2 + 2)/2
+        self.levels = time+1
+        self.numNodes = int( ( ( self.levels ** 2 ) + self.levels ) / 2 )
+        # initialize lists for tree storage
+        self.stockTree = [0] * self.numNodes
+        self.optTree = [0] * self.numNodes
+
+    # method for populating stock tree with stock prices
+    def stockPriceCalc( self ):
+        for level in range( self.levels ):
+            for i in range( level+1 ):
+                index = ( level ** 2 + level / 2 ) + i
+                self.stockTree[ index ] = self.startPrice * self.upSize ** ( level - 2 * i )
+
 
 class Call( Options ):
     def intrinsicValCalc( stockPrice, strikePrice ):
