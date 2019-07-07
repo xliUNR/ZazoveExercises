@@ -47,7 +47,13 @@ class OptionsClassTest( unittest.TestCase ):
         self.assertEqual( testOpt.stockTree, [ 0,0,0,0,0,0 ] )
         self.assertEqual( testOpt.optTree, [ 0,0,0,0,0,0 ] )
 
-
+    def test_stockPriceCalc(self):
+        testOpt = Options( 101, 100, 3, 1.03, 0.023 )
+        testOpt.stockPriceCalc()
+        self.assertEqual( testOpt.stockTree, 
+            [100.0, 103.0, 97.0873786407767, 106.08999999999999, 100.0, 94.25959091337543, 
+            109.2727, 103.0, 97.0873786407767, 91.51416593531594] )
+        
 
 if __name__ == '__main__':
     unittest.main()

@@ -19,12 +19,15 @@ class Options:
 
     # method for populating stock tree with stock prices
     def stockPriceCalc( self ):
-        for level in range( self.levels ):
+        for level in range( 0,self.levels ):
             for i in range( level+1 ):
-                index = ( level ** 2 + level / 2 ) + i
+                index = int( ( ( level ** 2 + level )/ 2 ) + i )
                 self.stockTree[ index ] = self.startPrice * self.upSize ** ( level - 2 * i )
 
-
+    # method for calculating option prices
+    def optionPriceCalc( self ):
+         calculate intrinsic value at final nodes
+         for i in range( self.levels - 1 * , self.numNodes )
 class Call( Options ):
     def intrinsicValCalc( stockPrice, strikePrice ):
         return max( (stockPrice - strikePrice),0 )
