@@ -34,7 +34,14 @@ def main():
     elif args.opt_type == 'P':
         optWork = Call( args.k, args.s, args.t, args.u, args.r )
 
-    print(optWork.strikePrice)
+    #fill out stock price tree
+    optWork.stockPriceCalc()
+    # fill out option price tree
+    optWork.optionPriceCalc()
+    #return root node value
+    print(optWork.optTree[0])
+
+    #print(optWork.strikePrice)
 
 if __name__ == '__main__':
     main()

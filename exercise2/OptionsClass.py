@@ -27,18 +27,27 @@ class Options:
 
     # method for calculating option prices
     def optionPriceCalc( self ):
-         # calculate intrinsic value at final nodes
-         for i in range( int ( ( ( self.levels - 1 ) ** 2 + self.levels )  / 2 ), self.numNodes ):
+        # calculate probabilities of upward and downward movement
+        pUp = ( 1 + self.riskFreeRate -  1 / 
+            self.upSize ) / ( self.upSize - 1 / self.upSize ) 
+        pDown = 1 - pUp
+
+        # calculate intrinsic value at final nodes
+        for i in range( int ( ( ( self.levels - 1 ) ** 2 + self.levels )  / 2 ), self.numNodes ):
             self.optTree[i] = self.intrinsicValCalc( self.stockTree[i] )
-    
-
-    # Then we back calculate depending on probabilities
-
+        #calculate for rest of tree
+        for level in range( self.levels - 2, -1, -1 ):
+            for i in range( level+1 ):
+                index = int( ( ( level ** 2 + level )/ 2 ) + i )
+                # calculate option price at node from next node weighted by probability
+                self.optTree[ index ] = ( 1 / ( 1 + self.riskFreeRate ) ) * ( pUp * 
+                    self.optTree[ int( index + level + 1) ] + pDown * self.optTree[ 
+                    int( index + level + 2 ) ] )
 
 
 class Call( Options ):
     def intrinsicValCalc( self, stockPrice ):
-        return max( (stockPrice - self.strikePrice),0 )
+        return max( (stockPrice - self.strikePrice), 0 )
 
 class Put( Options ):
     def intrinsicValCalc( self, stockPrice ):
