@@ -4,7 +4,7 @@
 
 class Options:
     """This is the base class for all options"""
-    def __init__(self, strikeP, startP, time, upSize, rfr):
+    def __init__( self, strikeP, startP, time, upSize, rfr ):
         self.strikePrice = strikeP
         self.startPrice = startP
         self.time = time
@@ -24,16 +24,24 @@ class Options:
                 index = int( ( ( level ** 2 + level )/ 2 ) + i )
                 self.stockTree[ index ] = self.startPrice * self.upSize ** ( level - 2 * i )
 
+
     # method for calculating option prices
     def optionPriceCalc( self ):
-         calculate intrinsic value at final nodes
-         for i in range( self.levels - 1 * , self.numNodes )
+         # calculate intrinsic value at final nodes
+         for i in range( int ( ( ( self.levels - 1 ) ** 2 + self.levels )  / 2 ), self.numNodes ):
+            self.optTree[i] = self.intrinsicValCalc( self.stockTree[i] )
+    
+
+    # Then we back calculate depending on probabilities
+
+
+
 class Call( Options ):
-    def intrinsicValCalc( stockPrice, strikePrice ):
-        return max( (stockPrice - strikePrice),0 )
+    def intrinsicValCalc( self, stockPrice ):
+        return max( (stockPrice - self.strikePrice),0 )
 
 class Put( Options ):
-    def intrinsicValCalc( stockPrice, strikePrice ):
-        return max( (strikePrice - stockPrice), 0 )
+    def intrinsicValCalc( self, stockPrice ):
+        return max( (self.strikePrice - stockPrice), 0 )
 
 
