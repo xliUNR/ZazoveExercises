@@ -53,7 +53,6 @@ class Call( Options ):
 class Put( Options ):
     def intrinsicValCalc( self, stockPrice ):
         return max( (self.strikePrice - stockPrice), 0 )
-        print( 'strikePrice', self.strikePrice)
-        print( 'stockPrice', stockPrice )
+
 
 

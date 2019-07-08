@@ -46,14 +46,14 @@ class OptionsClassTest( unittest.TestCase ):
         self.assertEqual( testOpt.numNodes, 6 )
         self.assertEqual( testOpt.stockTree, [ 0,0,0,0,0,0 ] )
         self.assertEqual( testOpt.optTree, [ 0,0,0,0,0,0 ] )
-
+    # test function for calculating stock price tree
     def test_stockPriceCalc(self):
         testOpt = Options( 101, 100, 3, 1.03, 0.023 )
         testOpt.stockPriceCalc()
         self.assertEqual( testOpt.stockTree, 
             [100.0, 103.0, 97.0873786407767, 106.08999999999999, 100.0, 94.25959091337543, 
             109.2727, 103.0, 97.0873786407767, 91.51416593531594] )
-
+    # Test function for calculating call option tree
     def test_callOptionPriceCalc(self):
         testOpt = Call( 101, 100, 3, 1.03, 0.023 )
         testOpt.stockPriceCalc()
@@ -61,7 +61,7 @@ class OptionsClassTest( unittest.TestCase ):
         self.assertEqual( testOpt.optTree, [5.810486541333014, 6.542893506048841, 
             1.4853573544887633, 7.360772238514163, 1.7235761395939335, 0.0,
             8.2727, 2.0, 0, 0] )
-
+    # Test function for calculating put option tree
     def test_putOptionPriceCalc(self):
         testOpt = Put(95, 100, 3, 1.03, 0.023 )    
         testOpt.stockPriceCalc()
