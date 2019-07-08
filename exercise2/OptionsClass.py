@@ -5,13 +5,13 @@
 class Options:
     """This is the base class for all options"""
     def __init__( self, strikeP, startP, time, upSize, rfr ):
-        self.strikePrice = strikeP
-        self.startPrice = startP
-        self.time = time
-        self.upSize = upSize
-        self.riskFreeRate = rfr
+        self.strikePrice = float( strikeP )
+        self.startPrice = float( startP )
+        self.time = int( time )
+        self.upSize = float ( upSize )
+        self.riskFreeRate = float ( rfr )
         # nodes required for binomial tree = (n^2 + 2)/2
-        self.levels = time+1
+        self.levels = self.time+1
         self.numNodes = int( ( ( self.levels ** 2 ) + self.levels ) / 2 )
         # initialize lists for tree storage
         self.stockTree = [0] * self.numNodes
@@ -53,5 +53,7 @@ class Call( Options ):
 class Put( Options ):
     def intrinsicValCalc( self, stockPrice ):
         return max( (self.strikePrice - stockPrice), 0 )
+        print( 'strikePrice', self.strikePrice)
+        print( 'stockPrice', stockPrice )
 
 

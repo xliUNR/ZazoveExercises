@@ -74,17 +74,28 @@ def inputArgChecker( parsedArgs ):
     # test for negative or 0 strike price
     if floatTypeCheck( parsedArgs.k, 'k' ):
         errorCount += negativeCheck( float( parsedArgs.k ), 'k')
+    else:
+        errorCount += 1
     # test for negative stock price
     if floatTypeCheck( parsedArgs.s, 's' ):
         errorCount += negativeCheck( float(parsedArgs.s ), 's' )
+    else:
+        errorCount += 1
     # test for negative time
     if intTypeCheck( parsedArgs.t, 't' ):
         errorCount += negativeCheck( int(parsedArgs.t ), 't' )
+    else:
+        errorCount += 1
     # test for negative upward movement size
     if floatTypeCheck( parsedArgs.u, 'u' ):
         errorCount += negativeCheck( float(parsedArgs.u ), 'u' )
+    else:
+        errorCount += 1
     # test for negative risk-free interest rate
     if floatTypeCheck( parsedArgs.r, 'u' ):
         errorCount += negativeCheck( float(parsedArgs.r ), 'r' )
+    else:
+        errorCount += 1
+    
     return errorCount 
 

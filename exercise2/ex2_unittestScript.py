@@ -58,13 +58,16 @@ class OptionsClassTest( unittest.TestCase ):
         testOpt = Call( 101, 100, 3, 1.03, 0.023 )
         testOpt.stockPriceCalc()
         testOpt.optionPriceCalc()
-        self.assertEqual()
+        self.assertEqual( testOpt.optTree, [5.810486541333014, 6.542893506048841, 
+            1.4853573544887633, 7.360772238514163, 1.7235761395939335, 0.0,
+            8.2727, 2.0, 0, 0] )
 
     def test_putOptionPriceCalc(self):
         testOpt = Put(95, 100, 3, 1.03, 0.023 )    
         testOpt.stockPriceCalc()
         testOpt.optionPriceCalc()
-        self.assertEqual()
-        
+        self.assertEqual(testOpt.optTree, [0.0054029845389456915, 0.0, 
+            0.046686507470941496, 0.0, 0.0, 0.403412218584582, 0, 0, 0, 3.485834064684056] )
+
 if __name__ == '__main__':
     unittest.main()

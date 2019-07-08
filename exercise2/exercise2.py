@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import sys
 import argparse
-from OptionsClass import Call,Put
+from OptionsClass import Options,Call,Put
 import optionsFunctions as opt
 
 def main():
@@ -17,23 +17,23 @@ def main():
 
     # check inputs
     errorCount = opt.inputArgChecker( args )
+    # If input errors occured, exit program
     if errorCount > 0:
         return 1
-    
+
     #instantiate P or C class
     if args.opt_type == 'C':
-        optWork = Put( args.k, args.s, args.t, args.u, args.r )
-    elif args.opt_type == 'P':
         optWork = Call( args.k, args.s, args.t, args.u, args.r )
+    elif args.opt_type == 'P':
+        optWork = Put( args.k, args.s, args.t, args.u, args.r )
 
     #fill out stock price tree
     optWork.stockPriceCalc()
     # fill out option price tree
     optWork.optionPriceCalc()
     #return root node value
-    print(optWork.optTree[0])
+    print('%.4f'%optWork.optTree[0])
 
-    #print(optWork.strikePrice)
-
+ 
 if __name__ == '__main__':
     main()
