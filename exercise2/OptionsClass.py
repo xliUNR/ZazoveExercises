@@ -31,19 +31,20 @@ class Options:
         pUp = ( 1 + self.riskFreeRate -  1 / 
             self.upSize ) / ( self.upSize - 1 / self.upSize ) 
         pDown = 1 - pUp
-
+        # calculate riskFreeRate discount
+        disRate = 1 / ( 1+self.riskFreeRate )
         # calculate intrinsic value at final nodes
         for i in range( int ( ( ( self.levels - 1 ) ** 2 + self.levels )  / 2 ), self.numNodes ):
             self.optTree[i] = self.intrinsicValCalc( self.stockTree[i] )
-        #calculate for rest of tree
+        #calculate option price for rest of tree
         for level in range( self.levels - 2, -1, -1 ):
             for i in range( level+1 ):
-                index = int( ( ( level ** 2 + level )/ 2 ) + i )
+                index = int( ( ( level ** 2 + level ) / 2 ) + i )
                 # calculate option price at node from next node weighted by probability
-                self.optTree[ index ] = ( 1 / ( 1 + self.riskFreeRate ) ) * ( pUp * 
-                    self.optTree[ int( index + level + 1) ] + pDown * self.optTree[ 
-                    int( index + level + 2 ) ] )
-
+                oPrice = disRate * ( 
+                    pUp * self.optTree[ int( index + level + 1) ] + 
+                    pDown * self.optTree[ int( index + level + 2 ) ] )
+                self.optTree[ index ] = oPrice
 
 class Call( Options ):
     def intrinsicValCalc( self, stockPrice ):
