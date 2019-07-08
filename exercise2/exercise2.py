@@ -14,20 +14,12 @@ def main():
     parser.add_argument('-u', help='Size of upward movement (floating point)', required=True)
     parser.add_argument('-r', help='Risk-free rate of interest as a decimal (floating point)', required=True)
     args = parser.parse_args()
-    print(type(args.opt_type))
-    print(type(args.k))
-    print(args.s)
-    print(args.t)
-    print(args.u)
-    print(args.r)
-    #print(type(args))
+
     # check inputs
     errorCount = opt.inputArgChecker( args )
-
     if errorCount > 0:
         return 1
     
-    print(errorCount)
     #instantiate P or C class
     if args.opt_type == 'C':
         optWork = Put( args.k, args.s, args.t, args.u, args.r )
